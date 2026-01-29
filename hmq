@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Chúc Mừng Sinh Nhật 🎉</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden;
+        }
+
+        .card {
+            background: white;
+            padding: 40px 60px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            animation: pop 1s ease;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        h1 {
+            color: #ff4d6d;
+            font-size: 40px;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #ff4d6d; }
+            to { text-shadow: 0 0 20px #ff8fa3; }
+        }
+
+        p {
+            font-size: 20px;
+            color: #333;
+        }
+
+        .heart {
+            font-size: 30px;
+            animation: beat 1s infinite;
+        }
+
+        @keyframes beat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+        textarea {
+    width: 90%;
+    height: 80px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 16px;
+    resize: none;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    background: #ff4d6d;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #ff1e4d;
+}
+
+#result {
+    margin-top: 15px;
+    font-style: italic;
+    color: #555;
+}
+
+    </style>
+</head>
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<div class="card">
+    <h1>🎂 Chúc Mừng Sinh Nhật HMQ 🎂</h1>
+    <p>Chúc chị Quý em ngày càng xinh đẹp, chăm ngoan học giỏi năm nay kiếm nhiều tiền tích góp mua đồng hồ 7 ty =))</p>
+    <p>HMQ Xinh đẹp, ngoan ngoãn, đáng yêu, cute 💖</p>
+    <div class="heart">❤️</div>
+    <h3>💌 Ý kiến người nhận</h3>
+
+    
+    <form action="https://formspree.io/f/mqebqjra" method="POST">
+    <textarea name="message" placeholder="Viết cảm nghĩ của bạn ở đây..." required></textarea>
+    <br>
+    <button type="submit">Gửi 💖</button>
+</form>
+
+</form>
+
+
+    <p id="result"></p>
+</div>
+
+<script>
+    const canvas = document.getElementById("fireworks");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particles = [];
+
+    function random(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    function createFirework(x, y) {
+        for (let i = 0; i < 50; i++) {
+            particles.push({
+                x: x,
+                y: y,
+                radius: 2,
+                color: `hsl(${random(0, 360)}, 100%, 60%)`,
+                vx: random(-4, 4),
+                vy: random(-4, 4),
+                life: 100
+            });
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach((p, i) => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.life--;
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fill();
+            if (p.life <= 0) particles.splice(i, 1);
+        });
+        requestAnimationFrame(animate);
+    }
+    function sendFeedback() {
+    const text = document.getElementById("feedback").value;
+    if (text.trim() === "") {
+        alert("Bạn chưa nhập ý kiến 💬");
+        return;
+    }
+    document.getElementById("result").innerHTML =
+        "💖 Người nhận nói: “" + text + "”";
+    document.getElementById("feedback").value = "";
+}
+
+
+    setInterval(() => {
+        createFirework(random(100, canvas.width - 100), random(100, canvas.height - 100));
+    }, 800);
+
+    animate();
+</script>
+
+</body>
+</html>
